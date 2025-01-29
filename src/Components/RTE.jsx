@@ -1,0 +1,57 @@
+import React from "react";
+import { Editor } from "@tinymce/tinymce-react";
+import { Controller } from "react-hook-form";
+import parse from 'html-react-parser'
+
+function RTE({ label, name, defaultValue = "", control }) {
+  console.log("default value parser is ", parse(defaultValue));
+  return (
+    <div>
+      {label && <label></label>}
+      <Controller
+        name={name}
+        control={control}
+        render={({field: {onChange}}) => (
+          <Editor
+            apiKey="eutetetc2igg1vo6dvjdvs5brjx4mrlmr76zwd55h6gtnxbm"
+            initialValue={defaultValue}
+            init={{
+              height: 500,
+              menubar: true,
+              plugins: [
+                "advlist",
+                "autolink",
+                "lists",
+                "link",
+                "image",
+                "charmap",
+                "preview",
+                "anchor",
+                "searchreplace",
+                "visualblocks",
+                "code",
+                "fullscreen",
+                "insertdatetime",
+                "media",
+                "table",
+                "code",
+                "help",
+                "wordcount",
+              ],
+              toolbar:
+                "undo redo | blocks | " +
+                "bold italic forecolor | alignleft aligncenter " +
+                "alignright alignjustify | bullist numlist outdent indent | " +
+                "removeformat | help",
+              content_style:
+                "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+            }}
+            onEditorChange={onChange}
+          />
+        )}
+      />
+    </div>
+  );
+}
+
+export default RTE;
