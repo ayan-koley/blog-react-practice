@@ -1,9 +1,11 @@
 import {useState, useEffect} from 'react'
 import databaseServices from '../appwrite/configure_services'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import { Container, PostCard } from '../Components';
+import { useSelector } from 'react-redux';
 function Home() {
     const [posts, setPosts] = useState([]);
+    const userData = useSelector(state => state.userData);
 
     useEffect(() => {
         databaseServices.listPost()
@@ -14,7 +16,7 @@ function Home() {
                     console.log("add post route")
                 }
             })
-    }, [])
+    }, [userData])
 
     if(posts.length < 1) {
         return (
@@ -22,7 +24,7 @@ function Home() {
                 <Container>
                     <div className="flex flex-wrap">
                         <div className="p-2 w-full">
-                            <h1 className="text-2xl font-bold hover:text-gray-500">
+                            <h1 className="text-2xl text-white font-bold hover:text-gray-500">
                                 Login and create post
                             </h1>
                         </div>

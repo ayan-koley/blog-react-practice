@@ -13,16 +13,20 @@ function SignUp() {
     const {register, handleSubmit} = useForm()
 
     const signUp = async(data) => {
-        console.log(data);
         setError("");
         try {
-            const userData = await authService.createAccount(data);
-            if(userData) {
+            const userData = await authService.createAccount({...data});
+            if(userData.success) {
                 const userData = await authService.getcurrentUser();
-                if(userData) dispatch(storeLogin(userData))
-                navigate("/")
+                if(userData) {
+                    dispatch(storeLogin(userData))
+                    navigate("/")
+                }
+            }   else {
+                setError(userData.message);
             }
         } catch (error) {
+            console.log("error message on signUp ", error.message);
             setError(error.message);
         }
     }

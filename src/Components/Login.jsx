@@ -9,20 +9,22 @@ import { Link, useNavigate } from 'react-router-dom';
 function Login() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const [error, setError] = useState(null);
+    const [error, setError] = useState("");
     const {register, handleSubmit} = useForm()
 
     const login = async(data) => {
-        console.log("Login Section data", data)
         setError("");
         try {
-            const session = await authService.login(data)
-            if(session) {
+            const session = await authService.login({...data})
+            console.log(session);
+            if(session.success) {
                 const userData = await authService.getcurrentUser();
                 if(userData) {
                     dispatch(storeLogin(userData))
+                    navigate("/")
                 } 
-                navigate("/")
+            }   else {
+                setError(session.message);
             }
         } catch (error) {
             setError(error.message)
@@ -54,7 +56,7 @@ function Login() {
                     <Input
                         label = "Email: "
                         placeholder = "Enter your email"
-                        className="p-2 pl-3"
+                        className="p-2 pl-3 "
                         {...register("email", {
                             required: true,
                             validate: {
@@ -66,7 +68,7 @@ function Login() {
                     <Input
                         label="Password: "
                         placeholder = "Enter your password"
-                        className="p-2 pl-3"
+                        className="p-2 pl-3 "
                         {...register("password", {
                             required: true
                         })}

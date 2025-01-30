@@ -67,13 +67,32 @@ export class DatabaseServices {
             return await this.databases.listDocuments(
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionId,
-                [Query.equal("status", "active")]
+                [
+                    Query.equal("status", "active")
+                
+                ]
             )
         } catch (error) {
             console.log("Appwrite Service :: listPost :: ", error);
             return false;
         }
     }
+
+    async ownPosts(userId) {
+        try {
+            return await this.databases.listDocuments(
+                conf.appwriteDatabaseId,
+                conf.appwriteCollectionId,
+                [
+                    Query.equal("userId", `${userId}`)
+                ]
+            )
+        } catch (error) {
+            console.log("Appwrite Service :: listPost :: ", error);
+            return false;
+        }
+    }
+
 
     // TODO: file upload file that change into seperate file later
     async uploadFile(file) {

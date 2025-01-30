@@ -13,31 +13,31 @@ export class AuthService {
             const userAccount = await this.account.create(ID.unique(), email, password, name);
             if(userAccount) {
                 // directly login
-                return this.login(email, password);
-            }   else {
-                console.log("Appwrite Service :: createUser :: ", error);
+                const session = await this.login({email, password});
+                if(session) {
+                    return session;
+                }
             }
         } catch (error) {
-            throw error;
+            return {success: false, message: error.message};
         }
     }
     async login({email, password}) {
         try {
-            const loginSession = this.account.createEmailPasswordSession(email, password);
-            if(loginSession) {
-                return loginSession;
-            }   else {
-                return null;
-            }
+            const loginSession = await this.account.createEmailPasswordSession(email, password);
+            return {success: true, message: "Successfully Login..."};
         } catch (error) {
             console.log("Appwrite Service :: login :: ", error);
+            return {success: false, message: error.message};
         }
     }
     async logout() {
         try {
-            return await this.account.deleteSessions();
+            const response = await this.account.deleteSessions();
+            return {success: true, message: "Successfully Logout"};
         } catch (error) {
             console.log("Appwrite Service :: logout :: ", error);
+            return {success: false, message: error.message};
         }
     }
     async forgetPassword({userId, oldPass, newPass}) {
@@ -53,11 +53,16 @@ export class AuthService {
     }
     async getcurrentUser() {
         try {
-            return this.account.get();
+            const account = await this.account.get();
+            if(account) {
+                return account;
+            }   else {
+                return null;
+            }
         } catch (error) {
            console.log("Appwrite Service :: getcurrentUser :: ", error);
+            return null;
         }
-        return null;
     }
 }
 
