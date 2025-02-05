@@ -6,7 +6,7 @@ import parse from 'html-react-parser'
 function RTE({ label, name, defaultValue = "", control }) {
   console.log("default value parser is ", parse(defaultValue));
   return (
-    <div>
+    <div className="w-full">
       {label && <label></label>}
       <Controller
         name={name}

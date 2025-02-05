@@ -27,7 +27,7 @@ function App() {
     style={{backgroundColor: '#000235'}}>
       <div className='mx-auto block m-4'>
       <Header />
-      <main>
+      <main className='rounded-2xl my-3' style={{backgroundColor: '#000F44'}}>
         <Outlet />
       </main>
       <Footer />

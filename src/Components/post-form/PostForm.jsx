@@ -16,8 +16,7 @@ function PostForm({ post }) {
     },
   });
   const navigate = useNavigate();
-  const userData = useSelector((state) => state.userData);
-
+  const userData = useSelector((state) => state.userData.userData);
   const submit = async (data) => {
     console.log(data);
     if (post) {
@@ -35,13 +34,11 @@ function PostForm({ post }) {
     } else {
       const file = await databaseServices.uploadFile(data.image[0]);
       if (file) {
-
         data.featuredImage = file.$id;
-        data.userId = userData.$id;
-        console.log(data);
         const newPost = await databaseServices.createPost({
-          ...data
+          ...data, userId: userData.$id
         });
+        console.log("newPost return data is ", newPost);
         if (newPost) {
           navigate(`/post/${newPost.$id}`);
         }
@@ -71,12 +68,13 @@ function PostForm({ post }) {
   }, [watch, slugTransform, setValue]);
 
   return (
-    <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
+    <form onSubmit={handleSubmit(submit)} className="md:flex flex-wrap">
             <div className="w-2/3 px-2">
                 <Input
                     label="Title :"
                     placeholder="Title"
                     className="mb-4 text-white px-2 p-2"
+                    labelColor="text-white"
                     {...register("title", { required: true })}
                 />
                 <Input
@@ -84,6 +82,7 @@ function PostForm({ post }) {
                     placeholder="Slug"
                     className="mb-4 text-white px-2 p-2"
                     value={post && post.$id}
+                    labelColor="text-white"
                     {...register("slug", { required: true })}
                     onInput={(e) => {
                         setValue("slug", slugTransform(e.currentTarget.value), { shouldValidate: true });
@@ -91,9 +90,10 @@ function PostForm({ post }) {
                 />
                 <RTE label="Content :" name="content" control={control} defaultValue={getValues("content")} />
             </div>
-            <div className="w-1/3 px-2">
+            <div className="w-full md:w-1/3 px-2">
                 <Input
                     label="Featured Image :"
+                    labelColor="text-white"
                     type="file"
                     className="mb-4 text-white"
                     accept="image/png, image/jpg, image/jpeg, image/gif"
@@ -102,7 +102,7 @@ function PostForm({ post }) {
                 {post && (
                     <div className="w-full mb-4">
                         <img
-                            src={databaseServicess.filePreview(post.featuredImage)}
+                            src={databaseServicess.filePreview({fileId: post.featuredImage, height:250, width:400})}
                             alt={post.title}
                             className="rounded-lg"
                         />
@@ -111,6 +111,7 @@ function PostForm({ post }) {
                 <Select
                     options={["active", "inactive"]}
                     label="Status"
+                    labelColor="text-white"
                     className="mb-4 text-white"
                     {...register("status", { required: true })}
                 />

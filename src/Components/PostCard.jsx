@@ -2,13 +2,13 @@ import React from "react";
 import databaseService from "../appwrite/configure_services";
 import { Link } from "react-router-dom";
 
-function PostCard({ $id, title, featuredImage }) {
+function PostCard({ $id, title, featuredImage, height, width }) {
   return (
     <Link to={`/post/${$id}`}>
       <div>
-        <div>
+        <div className="h-1/2">
           <img
-            src={databaseService.filePreview(featuredImage)}
+            src={databaseService.filePreview({fileId: featuredImage, height, width})}
             className="rounded-2xl"
           />
         </div>

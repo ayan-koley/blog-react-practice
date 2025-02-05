@@ -119,11 +119,13 @@ export class DatabaseServices {
             return false;
         }
     }
-     filePreview(fileId) {
+    filePreview({fileId, width, height}) {
         try {
             return  this.storage.getFilePreview(
                 conf.appwriteBucketId,
-                fileId
+                fileId,
+                width,
+                height
             )
         } catch (error) {
             console.log("Appwrite Service :: filePreview :: ", error);

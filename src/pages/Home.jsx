@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux';
 function Home() {
     const [posts, setPosts] = useState([]);
     const userData = useSelector(state => state.userData);
-
     useEffect(() => {
         databaseServices.listPost()
             .then((posts) => {
@@ -33,13 +32,15 @@ function Home() {
             </div>
         )
     }
+    console.log("posts is ", posts)
+    console.log(posts)
   return (
     <div className='w-full py-8'>
             <Container>
-                <div className='flex flex-wrap'>
+                <div className='flex flex-wrap justify-evenly'>
                     {posts.map((post) => (
-                        <div key={post.$id} className='p-2 w-1/5 bg-white mx-4 rounded-2xl m-5'>
-                            <PostCard {...post} />
+                        <div key={post.$id} className='p-2 md:w-1/5 bg-white mx-4 rounded-2xl m-5'>
+                            <PostCard {...post} height={150} width={200} />
                         </div>
                     ))}
                 </div>
